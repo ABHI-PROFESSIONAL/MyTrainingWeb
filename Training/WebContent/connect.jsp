@@ -11,7 +11,31 @@
     <meta charset="ISO-8859-1">
     <title>first jsp page</title>
     <!-- Compiled and minified CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <style>
+        .training-btn {
+            border-radius: 0px;
+            padding-top: 0px;
+    		padding-bottom: 0px;
+        }
+
+        .training-btn span {
+
+            position: relative;
+            top: -3px;
+            font-size: 16px;
+
+        }
+
+        .material-icons {
+            position: relative;
+            top: 6px;
+        }
+
+    </style>
+
 
 </head>
 
@@ -24,7 +48,7 @@ try{
 ResultSet rs=stmt.executeQuery();  
 %>
     <div class="container">
-        <table class="table table-hover">
+        <table id="training_table" class="table table-hover table-sm display">
             <thead>
                 <tr>
                     <th>Training Id</th>
@@ -32,6 +56,7 @@ ResultSet rs=stmt.executeQuery();
                     <th>Technology</th>
                     <th>Start Date</th>
                     <th>End Date</th>
+                    <th>Edit</th>
                     <th>Delete</th>
 
                 </tr>
@@ -47,8 +72,8 @@ while(rs.next()){  %>
                     <td><% out.print(rs.getString("technology"));%></td>
                     <td><% out.print(rs.getString("sdate"));%></td>
                     <td><% out.print(rs.getString("edate"));%></td>
-                    <td><button class="btn btn-primary " data-toggle="modal" data-target="#editmodal">Edit</button></td>
-                    <td><button class="btn btn-danger " data-toggle="modal" data-target="#deletemodal">Delete</button></td>
+                    <td><button class="btn btn-primary training-btn" data-toggle="modal" data-target="#editmodal"><span><i class="material-icons left">cloud</i> Edit</span></button></td>
+                    <td><button class="btn btn-danger training-btn" data-toggle="modal" data-target="#deletemodal"><span><i class="material-icons left">cloud</i> Delete</span></button></td>
                     <!--model for edit-->
                     <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -61,7 +86,7 @@ while(rs.next()){  %>
                                 </div>
                                 <div class="modal-body">
                                     <form action="edit.jsp">
-                                        
+
                                         <div class="form-group">
                                             <label for="training_name">Training Name</label>
                                             <input type="email" class="form-control" id="training_name" aria-describedby="emailHelp" placeholder="Training Name" value="<% out.print(rs.getString("training_name")); %>">
@@ -146,10 +171,28 @@ while(rs.next()){  %>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $('#myModal').on('shown.bs.modal', function() {
             $('#myInput').trigger('focus')
-        })
+        });
+        $(document).ready(function() {
+            $('#training_table').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": false,
+                "columnDefs": [{
+                        "orderable": false,
+                        "targets": [-1, -2]
+                    },
+                    {
+                        "searchable": false,
+                        "targets": [-1, -2]
+                    }
+                ]
+            });
+        });
 
     </script>
 </body>
